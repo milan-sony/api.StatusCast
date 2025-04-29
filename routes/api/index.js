@@ -14,4 +14,3 @@ const api = router.get("/", (req, res) => {
 router.use("/auth", authRoutes)
 
 export default api
-
