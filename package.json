@@ -1,0 +1,35 @@
+{
+  "name": "api.statuscast",
+  "version": "1.0.0",
+  "description": "api - StatusCast",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milan-sony/api.StatusCast.git"
+  },
+  "keywords": [
+    "StatusCast"
+  ],
+  "author": "Milan Sony",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milan-sony/api.StatusCast/issues"
+  },
+  "homepage": "https://github.com/milan-sony/api.StatusCast#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "npm": ">=8.0.0 <10.9.0",
+    "node": ">=18.0.0 <22.11.0"
+  }
+}
