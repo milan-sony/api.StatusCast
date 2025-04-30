@@ -3,35 +3,37 @@ export const signup = async (req, res) => {
 
         const { userName, firstName, lastName, email, password } = req.body
 
+        console.log(req.body)
+
         // check empty input fields
         if (!userName) {
             return res.status(400).json({
                 status: 400,
-                message: "UserName field is required"
+                message: "UserName is required"
             })
         }
         if (!firstName) {
             return res.status(400).json({
                 status: 400,
-                message: "FirstName field is required"
+                message: "FirstName is required"
             })
         }
         if (!email) {
             return res.status(400).json({
                 status: 400,
-                message: "Email field is required"
+                message: "Email is required"
             })
         }
         if (!password) {
             return res.status(400).json({
                 status: 400,
-                message: "Password field is required"
+                message: "Password is required"
             })
         }
 
-        
+        console.log(userName, firstName, lastName, email, password)
 
     } catch (error) {
-
+        console.error("Error signing up the user, ", error)
     }
 }
