@@ -1,6 +1,7 @@
 import User from "../model/userModel.js"
 import bcrypt from "bcryptjs"
 
+// user signup
 export const signup = async (req, res) => {
 
     // {
@@ -12,7 +13,6 @@ export const signup = async (req, res) => {
     //   }
 
     try {
-
         const { userName, firstName, lastName, email, password } = req.body
 
         // check empty input fields
@@ -92,6 +92,50 @@ export const signup = async (req, res) => {
         return res.status(500).json({
             status: 500,
             message: "Error signingup the user"
+        })
+    }
+}
+
+// user login
+export const login = async (req, res) => {
+
+    // {
+    //     "userName" : "3i74n",
+    //     "password" : "1234567890"
+    //   }
+
+    try {
+        const { userName, password } = req.body
+        // check user exists
+        const user = await User.findOne({ userName: userName })
+
+        if (!user) {
+            return res.status(400).json({
+                status: 400,
+                message: "Invalid credentials"
+            })
+        }
+
+        // check password
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) {
+            return res.status(400).json({
+                status: 400,
+                message: "Invalid credentials"
+            })
+        }
+
+        return res.status(200).json({
+            status: 200,
+            message: "Login succesfull",
+            data: user
+        })
+
+    } catch (error) {
+        console.error("Error loging the user, ", error)
+        return res.status(500).json({
+            status: 500,
+            message: "Error logingin the user"
         })
     }
 }
