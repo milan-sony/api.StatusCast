@@ -51,12 +51,12 @@ export const signup = async (req, res) => {
         }
 
         // check if the user already exists or not
-        const existingUser = await User.findOne({ userName: userName })
+        const existingUser = await User.findOne({ email: email })
 
         if (existingUser) {
             return res.status(400).json({
                 status: 400,
-                message: "User with this email already exist's"
+                message: "User with this email already exists!"
             })
         }
 
@@ -101,12 +101,12 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 
     // {
-    //     "userName" : "3i74n",
+    //     "email" : "milan@gmail.com",
     //     "password" : "1234567890"
     //   }
 
     try {
-        const { userName, password } = req.body
+        const { email, password } = req.body
 
         // check user exists
         const user = await User.findOne({ userName: userName })
