@@ -109,7 +109,7 @@ export const login = async (req, res) => {
         const { email, password } = req.body
 
         // check user exists
-        const user = await User.findOne({ userName: userName })
+        const user = await User.findOne({ email: email })
 
         if (!user) {
             return res.status(400).json({
@@ -128,7 +128,7 @@ export const login = async (req, res) => {
         }
 
         const accessToken = generateAccessToken(user._id)
-        generateRefreshToken(user._id)
+        generateRefreshToken(user._id, res)
 
         return res.status(200).json({
             status: 200,
