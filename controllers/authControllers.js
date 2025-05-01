@@ -1,6 +1,7 @@
 import User from "../model/userModel.js"
 import bcrypt from "bcryptjs"
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js"
+import jwt from 'jsonwebtoken'
 
 // user signup
 export const signup = async (req, res) => {
@@ -142,6 +143,53 @@ export const login = async (req, res) => {
         return res.status(500).json({
             status: 500,
             message: "Error logingin the user"
+        })
+    }
+}
+
+// generate access token with refresh token
+export const refresh = async (req, res) => {
+
+    const token = res.cookie.refreshToken
+
+    console.log("token", token)
+
+    // check if token exists
+    if (!token) {
+        console.error("Unauthorized user - refresh token not found")
+        return res.status(401).json({
+            status: 401,
+            message: "Unauthorized user - refresh token not found"
+        })
+    }
+
+    // verify refresh token
+    jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN, (error, user) => {
+        if (error) return res.status(403)
+        console.log(user)
+        const accessToken = generateAccessToken(user._id)
+        res.status(200).json({ accessToken })
+    })
+
+}
+
+export const logout = (req, res) => {
+    try {
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            path: '/auth/refresh',
+        });
+        return res.status(200).json({
+            status: 200,
+            message: "User logout successfully"
+        })
+    } catch (error) {
+        console.error("Error logging out the user, ", error)
+        return res.status(500).json({
+            status: 500,
+            message: "Error in logout the user"
         })
     }
 }
