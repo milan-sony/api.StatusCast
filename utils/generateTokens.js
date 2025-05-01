@@ -17,7 +17,7 @@ export const generateAccessToken = (userId) => {
 // Refresh token for new accesstoken
 export const generateRefreshToken = (userId, res) => {
     try {
-        const refreshToken = jwt.sign({userId}, process.env.JWT_SECRET_REFRESH_TOKEN)
+        const refreshToken = jwt.sign({ userId }, process.env.JWT_SECRET_REFRESH_TOKEN)
 
         // refresh token is set as cookie
         res.cookie('refreshToken', refreshToken, {
