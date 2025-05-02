@@ -76,7 +76,7 @@ export const signup = async (req, res) => {
 
         if (newUser) {
             // save new user to DB
-            newUser.save()
+            await newUser.save()
             return res.status(201).json({
                 status: 201,
                 message: "Account successfully created",
@@ -93,7 +93,8 @@ export const signup = async (req, res) => {
         console.error("Error signingup the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error signingup the user"
+            message: "Error signingup the user",
+            error: error
         })
     }
 }
@@ -142,35 +143,100 @@ export const login = async (req, res) => {
         console.error("Error loging the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error logingin the user"
+            message: "Error logingin the user",
+            error: error
         })
     }
 }
 
 // generate access token with refresh token
-export const refresh = async (req, res) => {
+// export const refresh = (req, res) => {
 
-    const token = res.cookie.refreshToken
+//     try {
+//         const token = req.cookies.refreshToken
 
-    console.log("token", token)
+//         console.log("RefreshToken: ", token)
 
-    // check if token exists
+//         // check if token exists
+//         if (!token) {
+//             console.error("Unauthorized user - refresh token not found")
+//             return res.status(401).json({
+//                 status: 401,
+//                 message: "Unauthorized user - refresh token not found"
+//             })
+//         }
+
+//         // verify refresh token
+//         try {
+//             const { userId } = jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN)
+//             const newAccessToken = generateAccessToken(userId)
+//             return res.status(200).json({
+//                 status: 200,
+//                 message: "New accessToken generated",
+//                 token: newAccessToken
+//             })
+//         } catch (error) {
+//             return res.status(403).json({
+//                 status: 403,
+//                 message: "Invalid or expired refresh token",
+//                 error: error
+//             })
+//         }
+
+//     } catch (error) {
+//         console.log("Error generating the refresh token, ", error)
+//         return res.status(500).json({
+//             status: 500,
+//             message: "Error generating the refresh token",
+//             error: error
+//         })
+//     }
+
+// }
+
+
+export const refresh = (req, res) => {
+    console.log("req: ", req.cookies)
+    const token = req.cookies.refreshToken
+
     if (!token) {
-        console.error("Unauthorized user - refresh token not found")
-        return res.status(401).json({
-            status: 401,
-            message: "Unauthorized user - refresh token not found"
-        })
+        return res.status(401).json({ message: 'No refresh token' })
     }
 
-    // verify refresh token
-    jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN, (error, user) => {
-        if (error) return res.status(403)
-        console.log(user)
-        const accessToken = generateAccessToken(user._id)
-        res.status(200).json({ accessToken })
-    })
+    try {
+        const { userId } = jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN)
+        const newAccessToken = generateAccessToken(userId)
+        return res.status(200).json({ accessToken: newAccessToken })
+    } catch (err) {
+        console.error("Refresh token error:", err)
+        return res.status(403).json({ message: 'Invalid or expired refresh token' })
+    }
+}
 
+export const profile = (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1]
+        if (!token) {
+            return res.status(401).json({
+                status: 401,
+                message: "No token found"
+            })
+        }
+
+        const { userId } = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN)
+        return res.status(200).json({
+            status: 200,
+            userId: userId
+        })
+
+    } catch (error) {
+        console.error("Error getting the profile, ", error)
+        return res.status(500).json({
+            status: 500,
+            message: "Error getting the profile",
+            error: error
+        })
+    }
 }
 
 export const logout = (req, res) => {
@@ -180,7 +246,7 @@ export const logout = (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             path: '/auth/refresh',
-        });
+        })
         return res.status(200).json({
             status: 200,
             message: "User logout successfully"
@@ -189,7 +255,8 @@ export const logout = (req, res) => {
         console.error("Error logging out the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error in logout the user"
+            message: "Error in logout the user",
+            error: error
         })
     }
 }

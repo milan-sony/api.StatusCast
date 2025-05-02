@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import bodyParser from "body-parser"
 import routes from "./routes/index.js"
 import connectDB from "./config/db.js"
-import cookieParser from "cookie-parser"
+import cookieParser from 'cookie-parser'
 
 // Config .env
 dotenv.config()
@@ -14,15 +14,15 @@ const app = express()
 // connect DB
 connectDB()
 
-// config cookie parser
-app.use(cookieParser())
-
 // body parser
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+// config cookie parser
+app.use(cookieParser())
 
 // base URL
 app.use("/", routes)
