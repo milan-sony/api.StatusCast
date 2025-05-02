@@ -23,7 +23,7 @@ export const generateRefreshToken = (userId, res) => {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true, // prevent XSS
             sameSite: "Strict", // prevent CSRF
-            secure: false, // This ensures that the cookie is only sent over HTTPS connections. It is set to true in production
+            secure:  process.env.NODE_ENV === "production", // This ensures that the cookie is only sent over HTTPS connections. It is set to true in production
             maxAge: 7 * 24 * 60 * 60 * 1000, // Sets the lifetime of the cookie to 7 days (in milliseconds)
             path: "/auth/refresh"
         })

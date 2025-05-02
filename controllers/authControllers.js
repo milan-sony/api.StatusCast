@@ -197,7 +197,10 @@ export const login = async (req, res) => {
 
 export const refresh = (req, res) => {
     console.log("req: ", req.cookies)
+
     const token = req.cookies.refreshToken
+
+    console.log("Refresh Token: ", token)
 
     if (!token) {
         return res.status(401).json({ message: 'No refresh token' })
@@ -245,7 +248,7 @@ export const logout = (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
-            path: '/auth/refresh',
+            path: '/auth/logout',
         })
         return res.status(200).json({
             status: 200,
