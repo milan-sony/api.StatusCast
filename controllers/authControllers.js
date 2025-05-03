@@ -150,51 +150,6 @@ export const login = async (req, res) => {
 }
 
 // generate access token with refresh token
-// export const refresh = (req, res) => {
-
-//     try {
-//         const token = req.cookies.refreshToken
-
-//         console.log("RefreshToken: ", token)
-
-//         // check if token exists
-//         if (!token) {
-//             console.error("Unauthorized user - refresh token not found")
-//             return res.status(401).json({
-//                 status: 401,
-//                 message: "Unauthorized user - refresh token not found"
-//             })
-//         }
-
-//         // verify refresh token
-//         try {
-//             const { userId } = jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN)
-//             const newAccessToken = generateAccessToken(userId)
-//             return res.status(200).json({
-//                 status: 200,
-//                 message: "New accessToken generated",
-//                 token: newAccessToken
-//             })
-//         } catch (error) {
-//             return res.status(403).json({
-//                 status: 403,
-//                 message: "Invalid or expired refresh token",
-//                 error: error
-//             })
-//         }
-
-//     } catch (error) {
-//         console.log("Error generating the refresh token, ", error)
-//         return res.status(500).json({
-//             status: 500,
-//             message: "Error generating the refresh token",
-//             error: error
-//         })
-//     }
-
-// }
-
-
 export const refresh = (req, res) => {
     console.log("req: ", req.cookies)
 
@@ -242,13 +197,14 @@ export const profile = (req, res) => {
     }
 }
 
+// user logout
 export const logout = (req, res) => {
     try {
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
-            path: '/auth/logout',
+            path: '/',
         })
         return res.status(200).json({
             status: 200,
