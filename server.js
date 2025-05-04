@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import routes from "./routes/index.js"
 import connectDB from "./config/db.js"
 import cookieParser from 'cookie-parser'
+import cors from "cors"
 
 // Config .env
 dotenv.config()
@@ -20,6 +21,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+// cors
+app.use(cors({
+    origin: process.env.REACT_URL,
+    credentials: true //allows to send cookies and authorization headers with the request
+}))
 
 // config cookie parser
 app.use(cookieParser())
