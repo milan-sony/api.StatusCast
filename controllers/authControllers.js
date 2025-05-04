@@ -82,10 +82,10 @@ export const signup = async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Error signingup the user, ", error)
+        console.error("Error signing up the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error signingup the user",
+            message: "Error signing up the user",
             error: error
         })
     }
@@ -133,16 +133,16 @@ export const login = async (req, res) => {
 
         return res.status(200).json({
             status: 200,
-            message: "Login succesfull",
+            message: "Succesfully logged in",
             data: userData,
             token: accessToken
         })
 
     } catch (error) {
-        console.error("Error loging the user, ", error)
+        console.error("Error logging in the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error logingin the user",
+            message: "Error logging in the user",
             error: error
         })
     }
@@ -207,13 +207,13 @@ export const logout = (req, res) => {
         })
         return res.status(200).json({
             status: 200,
-            message: "User logout successfully"
+            message: "Successfully logged out"
         })
     } catch (error) {
         console.error("Error logging out the user, ", error)
         return res.status(500).json({
             status: 500,
-            message: "Error in logout the user",
+            message: "Error logging out the user",
             error: error
         })
     }
