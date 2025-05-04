@@ -170,6 +170,21 @@ export const refresh = (req, res) => {
     }
 }
 
+export const checkAuth = (req, res) => {
+    try {
+        res.status(200).json({
+            user: req.user
+        })
+    } catch (error) {
+        console.log("Error in checkAuth", error.message)
+        res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            error: error
+        })
+    }
+}
+
 export const profile = (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1]
