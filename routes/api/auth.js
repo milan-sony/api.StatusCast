@@ -1,5 +1,6 @@
 import express from "express"
-import { signup, login, refresh, logout, profile } from "../../controllers/authControllers.js"
+import { signup, login, refresh, logout, profile, checkAuth } from "../../controllers/authControllers.js"
+import { verifyToken } from "../../middleware/verifyToken.js"
 
 const authRoutes = express.Router()
 
@@ -17,6 +18,9 @@ authRoutes.post("/logout", logout)
 
 // user profile
 authRoutes.post("/profile", profile)
+
+// check auth
+authRoutes.get("/check", verifyToken, checkAuth)
 
 
 export default authRoutes
