@@ -113,7 +113,7 @@ export const login = async (req, res) => {
         }
 
         // check password
-        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        const isPasswordCorrect = await bcrypt.compare(password, user.password).select("-password -__v")
         if (!isPasswordCorrect) {
             return res.status(400).json({
                 status: 400,
@@ -124,17 +124,10 @@ export const login = async (req, res) => {
         const accessToken = generateAccessToken(user._id)
         generateRefreshToken(user._id, res)
 
-        const userData = {
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email
-        }
-
         return res.status(200).json({
             status: 200,
             message: "Succesfully logged in",
-            data: userData,
+            data: user,
             token: accessToken
         })
 
@@ -172,6 +165,7 @@ export const refresh = (req, res) => {
 
 export const checkAuth = (req, res) => {
     try {
+        console.log("Checkauth req.user", req.user)
         res.status(200).json({
             user: req.user
         })
