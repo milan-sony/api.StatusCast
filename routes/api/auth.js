@@ -20,7 +20,7 @@ authRoutes.post("/logout", logout)
 authRoutes.post("/profile", profile)
 
 // check auth
-authRoutes.get("/check", verifyToken, checkAuth)
+authRoutes.post("/check", verifyToken, checkAuth)
 
 
 export default authRoutes

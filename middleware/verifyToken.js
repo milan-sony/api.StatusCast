@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken"
+import User from "../model/userModel.js"
 
 export const verifyToken = (req, res, next) => {
-    const token = req.header('Authorization')
+
+    const token = req.headers.authorization?.split(' ')[1] // Split the bearer token "bearer efhjkhfjkhjkhsjkhsjkhjgkhkjsh"
 
     if (!token) {
         return res.status(401).json({
@@ -10,15 +12,20 @@ export const verifyToken = (req, res, next) => {
         })
     }
 
-    // split the bearer token "bearer efhjkhfjkhjkhsjkhsjkhjgkhkjsh"
-
-    const bearer = token.split(' ');
-    const bearerToken = bearer[1];
-
     try {
-        const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET_ACCESS_TOKEN);
-        console.log("decoded", decoded)
-        req.user = decoded
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN)
+
+        const user = User.findOne({ _id: decoded.userId }).select("-password -__v")
+
+        if (!user) {
+            return res.status(400).json({
+                status: 400,
+                message: "User not found"
+            })
+        }
+
+        req.user = user
+
         next()
     } catch (error) {
         return res.status(400).json({

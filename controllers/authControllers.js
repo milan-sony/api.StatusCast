@@ -177,7 +177,6 @@ export const refresh = (req, res) => {
 
 export const checkAuth = (req, res) => {
     try {
-        console.log("Checkauth req.user", req.user)
         res.status(200).json({
             user: req.user
         })
@@ -201,10 +200,15 @@ export const profile = (req, res) => {
             })
         }
 
-        const { userId } = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN)
+
+        const userId = decoded.userId
+
+        const user = User.findOne({ _id: userId }).select("-password -__v")
+
         return res.status(200).json({
             status: 200,
-            userId: userId
+            user: user
         })
 
     } catch (error) {
