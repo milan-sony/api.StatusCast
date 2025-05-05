@@ -148,7 +148,7 @@ export const login = async (req, res) => {
     }
 }
 
-// generate access token with refresh token
+// generate refresh token when access token expires
 export const refresh = (req, res) => {
 
     const token = req.cookies.refreshToken
