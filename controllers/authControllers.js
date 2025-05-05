@@ -178,6 +178,8 @@ export const refresh = (req, res) => {
 export const checkAuth = (req, res) => {
     try {
         res.status(200).json({
+            status: 200,
+            message: "User authenticated",
             user: req.user
         })
     } catch (error) {
@@ -190,7 +192,7 @@ export const checkAuth = (req, res) => {
     }
 }
 
-export const profile = (req, res) => {
+export const profile = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1]
         if (!token) {
@@ -204,10 +206,11 @@ export const profile = (req, res) => {
 
         const userId = decoded.userId
 
-        const user = User.findOne({ _id: userId }).select("-password -__v")
+        const user = await User.findOne({ _id: userId }).select("-password -__v")
 
         return res.status(200).json({
             status: 200,
+            message: "Profile found",
             user: user
         })
 
