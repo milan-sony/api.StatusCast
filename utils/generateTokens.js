@@ -29,7 +29,12 @@ export const generateRefreshToken = (userId, res) => {
         })
 
     } catch (error) {
-        console.error("Error generating the refresh token, ", error)
+        console.error("Error generating tokens: ", error);
+        return res.status(500).json({
+            status: 500,
+            message: "Error generating the tokens",
+            error: error
+        });
     }
 }
 

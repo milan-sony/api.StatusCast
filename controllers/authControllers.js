@@ -113,7 +113,7 @@ export const login = async (req, res) => {
         }
 
         // check password
-        const isPasswordCorrect = await bcrypt.compare(password, user.password).select("-password -__v")
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
         if (!isPasswordCorrect) {
             return res.status(400).json({
                 status: 400,
@@ -124,10 +124,17 @@ export const login = async (req, res) => {
         const accessToken = generateAccessToken(user._id)
         generateRefreshToken(user._id, res)
 
+        const userData = {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email
+        }
+
         return res.status(200).json({
             status: 200,
-            message: "Succesfully logged in",
-            data: user,
+            message: "You have successfully logged in",
+            data: userData,
             token: accessToken
         })
 
@@ -143,22 +150,27 @@ export const login = async (req, res) => {
 
 // generate access token with refresh token
 export const refresh = (req, res) => {
-    console.log("req: ", req.cookies)
 
     const token = req.cookies.refreshToken
 
-    console.log("Refresh Token: ", token)
-
     if (!token) {
-        return res.status(401).json({ message: 'No refresh token' })
+        return res.status(401).json({
+            status: 401,
+            message: 'No refresh token'
+        })
     }
 
     try {
-        const { userId } = jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_REFRESH_TOKEN)
+
+        const userId = decoded.userId
+
         const newAccessToken = generateAccessToken(userId)
+
         return res.status(200).json({ accessToken: newAccessToken })
     } catch (err) {
         console.error("Refresh token error:", err)
+
         return res.status(403).json({ message: 'Invalid or expired refresh token' })
     }
 }
@@ -216,7 +228,7 @@ export const logout = (req, res) => {
         })
         return res.status(200).json({
             status: 200,
-            message: "Successfully logged out"
+            message: "You have successfully logged out"
         })
     } catch (error) {
         console.error("Error logging out the user, ", error)
