@@ -175,50 +175,18 @@ export const refresh = (req, res) => {
     }
 }
 
-export const checkAuth = (req, res) => {
+export const profile = (req, res) => {
     try {
         res.status(200).json({
             status: 200,
-            message: "User authenticated",
+            message: "Profile found",
             user: req.user
         })
     } catch (error) {
-        console.log("Error in checkAuth", error.message)
+        console.log("Error in finding profile", error.message)
         res.status(500).json({
             status: 500,
             message: "Internal server error",
-            error: error
-        })
-    }
-}
-
-export const profile = async (req, res) => {
-    try {
-        const token = req.headers.authorization?.split(' ')[1]
-        if (!token) {
-            return res.status(401).json({
-                status: 401,
-                message: "No token found"
-            })
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN)
-
-        const userId = decoded.userId
-
-        const user = await User.findOne({ _id: userId }).select("-password -__v")
-
-        return res.status(200).json({
-            status: 200,
-            message: "Profile found",
-            user: user
-        })
-
-    } catch (error) {
-        console.error("Error getting the profile, ", error)
-        return res.status(500).json({
-            status: 500,
-            message: "Error getting the profile",
             error: error
         })
     }
