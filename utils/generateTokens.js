@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 export const generateAccessToken = (userId) => {
     try {
         const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET_ACCESS_TOKEN, {
-            expiresIn: "1m"
+            expiresIn: "15m"
         })
 
         return accessToken
@@ -25,6 +25,7 @@ export const generateRefreshToken = (userId, res) => {
             sameSite: "Strict", // prevent CSRF
             secure:  process.env.NODE_ENV === "production", // This ensures that the cookie is only sent over HTTPS connections. It is set to true in production
             maxAge: 7 * 24 * 60 * 60 * 1000, // Sets the lifetime of the cookie to 7 days (in milliseconds)
+            // maxAge: 1 * 60 * 1000,
             path: "/"
         })
 
