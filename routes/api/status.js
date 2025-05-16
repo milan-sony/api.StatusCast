@@ -1,10 +1,14 @@
 import express from "express"
-import { setStatus } from "../../controllers/statusController.js"
+import { setStatus, getStatus } from "../../controllers/statusController.js"
+import { verifyToken } from "../../middleware/verifyToken.js"
 
 
 const statusRoutes = express.Router()
 
-// user signup
-statusRoutes.post("/set-status", setStatus)
+// set status
+statusRoutes.post("/set-status", verifyToken, setStatus)
+
+// get status
+statusRoutes.get("/get-status/:id", verifyToken, getStatus)
 
 export default statusRoutes

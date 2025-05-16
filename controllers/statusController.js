@@ -55,3 +55,27 @@ export const setStatus = async (req, res) => {
         })
     }
 }
+
+// get status
+export const getStatus = async (req, res) => {
+
+    try {
+        const userId = req.params.id
+
+        const status = await Status.find({ userId: userId }).select("-__v")
+
+        console.log("status:", status)
+
+        return res.status(200).json({
+            status: 200,
+            message: status
+        })
+    } catch (error) {
+        console.error("Error getting the user status, ", error)
+        return res.status(500).json({
+            status: 500,
+            message: "Error getting the user status",
+            error: error
+        })
+    }
+}
