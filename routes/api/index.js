@@ -1,6 +1,7 @@
 import express from "express"
 import authRoutes from "./auth.js"
 import userRoutes from "./user.js"
+import statusRoutes from "./status.js"
 
 const router = express.Router()
 
@@ -16,5 +17,8 @@ router.use("/auth", authRoutes)
 
 // user routes
 router.use("/user", userRoutes)
+
+// status route
+router.use("/status", statusRoutes)
 
 export default api
