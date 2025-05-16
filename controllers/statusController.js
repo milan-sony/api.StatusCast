@@ -62,7 +62,7 @@ export const getStatus = async (req, res) => {
     try {
         const userId = req.params.id
 
-        const status = await Status.find({ userId: userId }).select("-__v")
+        const status = await Status.findOne({ userId: userId }).select("-__v")
 
         return res.status(200).json({
             status: 200,
