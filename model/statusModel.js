@@ -7,8 +7,7 @@ const statusSchema = new mongoose.Schema({
     },
     emoji: {
         type: String,
-        required: false,
-        default: "💭"
+        required: true,
     },
     status: {
         type: String,
