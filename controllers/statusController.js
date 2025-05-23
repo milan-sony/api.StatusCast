@@ -24,6 +24,16 @@ export const setStatus = async (req, res) => {
             })
         }
 
+        // check if the user already set status
+        const existingStatus = await Status.findOne({ userId: userId })
+
+        if (existingStatus) {
+            return res.status(400).json({
+                status: 400,
+                message: "You have already set one status"
+            })
+        }
+
         const newStatus = new Status({
             userId: userId,
             emoji: emoji,
@@ -36,7 +46,7 @@ export const setStatus = async (req, res) => {
             await newStatus.save()
             return res.status(201).json({
                 status: 201,
-                message: "Status Saved successfully",
+                message: "Status set successfully",
                 data: newStatus
             })
         } else {
