@@ -5,14 +5,14 @@ import jwt from 'jsonwebtoken'
 
 // user signup
 export const signup = async (req, res) => {
-
-    // {
-    //     "firstName" : "Milan",
-    //     "lastName" : "Sony",
-    //     "email" : "milan@gmail.com",
-    //     "password" : "1234567890"
-    //   }
-
+    /**
+    {
+        "firstName" : "Milan",
+        "lastName" : "Sony",
+        "email" : "milan@gmail.com",
+        "password" : "1234567890"
+    }
+    */
     try {
         const { firstName, lastName, email, password } = req.body
 
@@ -93,12 +93,12 @@ export const signup = async (req, res) => {
 
 // user login
 export const login = async (req, res) => {
-
-    // {
-    //     "email" : "milan@gmail.com",
-    //     "password" : "1234567890"
-    //   }
-
+    /**
+        {
+            "email" : "milan@gmail.com",
+            "password" : "1234567890"
+        }
+     */
     try {
         const { email, password } = req.body
 
