@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const statusSchema = new mongoose.Schema({
     userId: {
         type: String,
+        ref: 'User',
         required: true
     },
     emoji: {

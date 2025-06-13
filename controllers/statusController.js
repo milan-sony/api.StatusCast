@@ -111,3 +111,24 @@ export const deleteStatus = async (req, res) => {
         })
     }
 }
+
+// get all user status
+export const getAllUsersStatus = async (req, res) => {
+    try {
+        const allUsersStatus = await Status.find()
+            .populate('userId', 'firstName lastName -_id') // Get firstName & lastName from User, exclude _id
+            .select('-__v');
+
+        return res.status(200).json({
+            status: 200,
+            message: allUsersStatus
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            message: "Error getting all user status",
+            error: error.message
+        });
+    }
+};
+
