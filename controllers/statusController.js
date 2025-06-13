@@ -87,3 +87,27 @@ export const getStatus = async (req, res) => {
         })
     }
 }
+
+// delete status
+export const deleteStatus = async (req, res) => {
+    try {
+        const userId = req.params.id
+
+        const status = await Status.deleteOne({ userId: userId }).select("-__v")
+
+        return res.status(201).json({
+            status: 201,
+            message: "Status deleted successfully",
+            data: status
+        })
+
+    } catch (error) {
+        console.error("Error deleting the user status, ", error)
+
+        return res.status(500).json({
+            status: 500,
+            message: "Error deleting the user status",
+            error: error
+        })
+    }
+}
