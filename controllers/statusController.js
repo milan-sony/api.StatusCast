@@ -1,9 +1,12 @@
-import Status from "../model/statusModel.js";
+import Status from "../model/statusModel.js"
 
 // set status
 export const setStatus = async (req, res) => {
     try {
-        const { userId, emoji, status, startTime, endTime } = req.body
+
+        const loggedUserId = req.user?._id
+
+        const { emoji, status, startTime, endTime } = req.body
         // check for empty inputs
         if (!status) {
             return res.status(400).json({
@@ -25,7 +28,7 @@ export const setStatus = async (req, res) => {
         }
 
         // check if the user already set status
-        const existingStatus = await Status.findOne({ userId: userId })
+        const existingStatus = await Status.findOne({ userId: loggedUserId })
 
         if (existingStatus) {
             return res.status(400).json({
@@ -35,7 +38,7 @@ export const setStatus = async (req, res) => {
         }
 
         const newStatus = new Status({
-            userId: userId,
+            userId: loggedUserId,
             emoji: emoji,
             status: status,
             startTime: startTime,
@@ -70,9 +73,9 @@ export const setStatus = async (req, res) => {
 export const getStatus = async (req, res) => {
 
     try {
-        const userId = req.params.id
+        const loggedUserId = req.user?._id // user id is getting from the verifyToken
 
-        const status = await Status.findOne({ userId: userId }).select("-__v")
+        const status = await Status.findOne({ userId: loggedUserId }).select("-__v")
 
         return res.status(200).json({
             status: 200,
@@ -91,9 +94,9 @@ export const getStatus = async (req, res) => {
 // delete status
 export const deleteStatus = async (req, res) => {
     try {
-        const userId = req.params.id
+        const loggedUserId = req.user?._id
 
-        const status = await Status.deleteOne({ userId: userId }).select("-__v")
+        const status = await Status.deleteOne({ userId: loggedUserId }).select("-__v")
 
         return res.status(201).json({
             status: 201,
@@ -115,20 +118,23 @@ export const deleteStatus = async (req, res) => {
 // get all user status
 export const getAllUsersStatus = async (req, res) => {
     try {
-        const allUsersStatus = await Status.find()
+
+        const loggedUserId = req.user?._id
+
+        const allUsersStatus = await Status.find({ userId: { $ne: loggedUserId } })
             .populate('userId', 'firstName lastName -_id') // Get firstName & lastName from User, exclude _id
-            .select('-__v');
+            .select('-__v')
 
         return res.status(200).json({
             status: 200,
             message: allUsersStatus
-        });
+        })
     } catch (error) {
         return res.status(500).json({
             status: 500,
             message: "Error getting all user status",
             error: error.message
-        });
+        })
     }
-};
+}
 

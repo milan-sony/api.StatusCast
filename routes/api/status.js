@@ -9,10 +9,10 @@ const statusRoutes = express.Router()
 statusRoutes.post("/set-status", verifyToken, setStatus)
 
 // get status
-statusRoutes.get("/get-status/:id", verifyToken, getStatus)
+statusRoutes.get("/get-status", verifyToken, getStatus)
 
 // delete status
-statusRoutes.delete("/delete-status/:id", verifyToken, deleteStatus)
+statusRoutes.delete("/delete-status", verifyToken, deleteStatus)
 
 // get all status
 statusRoutes.get("/get-all-status", verifyToken, getAllUsersStatus)
