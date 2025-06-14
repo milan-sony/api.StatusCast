@@ -14,15 +14,23 @@ export const signup = async (req, res) => {
     }
     */
     try {
-        const { firstName, lastName, email, password } = req.body
+        const { userName, firstName, lastName, email, password } = req.body
 
         // check empty input fields
+        if (!userName) {
+            return res.status(400).json({
+                status: 400,
+                message: "User Name is required"
+            })
+        }
+
         if (!firstName) {
             return res.status(400).json({
                 status: 400,
-                message: "FirstName is required"
+                message: "First Name is required"
             })
         }
+
         if (!email) {
             return res.status(400).json({
                 status: 400,
@@ -33,14 +41,6 @@ export const signup = async (req, res) => {
             return res.status(400).json({
                 status: 400,
                 message: "Password is required"
-            })
-        }
-
-        // check password length
-        if (password.length < 6) {
-            return res.status(400).json({
-                status: 400,
-                message: "Password must be atleast 6 character"
             })
         }
 
@@ -60,6 +60,7 @@ export const signup = async (req, res) => {
 
         // creating the new user object
         const newUser = new User({
+            userName: userName,
             firstName: firstName,
             lastName: lastName,
             email: email,
