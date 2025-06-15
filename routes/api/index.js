@@ -2,6 +2,7 @@ import express from "express"
 import authRoutes from "./auth.js"
 import userRoutes from "./user.js"
 import statusRoutes from "./status.js"
+import searchRoutes from "./search.js"
 
 const router = express.Router()
 
@@ -20,5 +21,8 @@ router.use("/user", userRoutes)
 
 // status route
 router.use("/status", statusRoutes)
+
+// search users
+router.use("/search", searchRoutes)
 
 export default api
