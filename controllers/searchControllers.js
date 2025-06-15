@@ -15,6 +15,14 @@ export const searchProfile = async (req, res) => {
 
         const regex = new RegExp(searchName, 'i')
 
+        /**
+            new RegExp(searchName, 'i') creates a case-insensitive regex, allowing partial matches like:
+
+            milan will match MilanSony, milan123, or Milan.Gmail@example.com.
+
+            $or ensures that any of the fields (userName, firstName, email) can match
+         */
+
         const results = await User.find({
             $or: [
                 { userName: regex },
