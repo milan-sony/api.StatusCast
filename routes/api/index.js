@@ -3,6 +3,7 @@ import authRoutes from "./auth.js"
 import userRoutes from "./user.js"
 import statusRoutes from "./status.js"
 import searchRoutes from "./search.js"
+import friendRequestRoutes from "./friendRequest.js"
 
 const router = express.Router()
 
@@ -24,5 +25,8 @@ router.use("/status", statusRoutes)
 
 // search users
 router.use("/search", searchRoutes)
+
+// friend request
+router.use("/friend-requests", friendRequestRoutes)
 
 export default api
