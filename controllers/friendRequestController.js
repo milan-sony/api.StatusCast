@@ -56,3 +56,40 @@ export const sendFriendRequest = async (req, res) => {
     }
 }
 
+// received requests
+export const getReceivedRequests = async (req, res) => {
+    try {
+        const response = await FriendRequest.find(
+            {
+                to: req.user._id,
+                status: 'pending'
+            }
+        ).populate('from', 'userName firstName lastName email')
+        res.status(200).json(
+            {
+                status: 200,
+                message: response
+            }
+        )
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch requests", error })
+    }
+}
+
+// sent requests
+export const getSentRequests = async (req, res) => {
+    try {
+        const response = await FriendRequest.find(
+            {
+                from: req.user?._id,
+                status: 'pending'
+            }
+        ).populate('to', 'userName firstName lastName email')
+        res.status(200).json({
+            status: 200,
+            message: response
+        })
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch requests", error })
+    }
+}
