@@ -29,7 +29,7 @@ export const searchProfile = async (req, res) => {
                 { firstName: regex },
                 { email: regex }
             ]
-        })
+        }).select("-__v -password")
 
         res.status(200).json(
             {
