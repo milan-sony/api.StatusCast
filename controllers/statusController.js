@@ -1,4 +1,5 @@
 import Status from "../model/statusModel.js"
+import User from "../model/userModel.js"
 
 // set status
 export const setStatus = async (req, res) => {
@@ -116,25 +117,58 @@ export const deleteStatus = async (req, res) => {
 }
 
 // get all user status
-export const getAllUsersStatus = async (req, res) => {
-    try {
+// export const getAllUsersStatus = async (req, res) => {
+//     try {
 
+//         const loggedUserId = req.user?._id
+
+//         const allUsersStatus = await Status.find({ userId: { $ne: loggedUserId } })
+//             .populate('userId', 'firstName lastName -_id') // Get firstName & lastName from User, exclude _id
+//             .select('-__v')
+
+//         return res.status(200).json({
+//             status: 200,
+//             message: allUsersStatus
+//         })
+//     } catch (error) {
+//         return res.status(500).json({
+//             status: 500,
+//             message: "Error getting all user status",
+//             error: error.message
+//         })
+//     }
+// }
+
+export const getFriendsStatuses = async (req, res) => {
+    try {
         const loggedUserId = req.user?._id
 
-        const allUsersStatus = await Status.find({ userId: { $ne: loggedUserId } })
-            .populate('userId', 'firstName lastName -_id') // Get firstName & lastName from User, exclude _id
-            .select('-__v')
+        console.log("loggedUserId", loggedUserId)
+
+        // Get current user's friends
+        const currentUser = await User.findById(loggedUserId).select("friends")
+
+        console.log("currentUser: ", currentUser)
+
+        const friendsIds = currentUser.friends
+
+        console.log("friendsIds: ", friendsIds)
+
+        // Get statuses posted by friends only
+        const statuses = await Status.find({ userId: { $in: friendsIds } })
+            .sort({ createdAt: -1 }) // latest first
+            .populate("userId", "firstName lastName -_id") // Get firstName & lastName from User, exclude _id
+
+        console.log("statuses: ", statuses)
 
         return res.status(200).json({
             status: 200,
-            message: allUsersStatus
+            message: statuses
         })
+
     } catch (error) {
-        return res.status(500).json({
-            status: 500,
-            message: "Error getting all user status",
-            error: error.message
-        })
+        console.error("getFriendsStatuses error:", error)
+        res.status(500).json({ message: "Failed to load friends' statuses", error })
     }
 }
 

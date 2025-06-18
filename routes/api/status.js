@@ -1,5 +1,5 @@
 import express from "express"
-import { setStatus, getStatus, deleteStatus, getAllUsersStatus } from "../../controllers/statusController.js"
+import { setStatus, getStatus, deleteStatus, getFriendsStatuses } from "../../controllers/statusController.js"
 import { verifyToken } from "../../middleware/verifyToken.js"
 
 
@@ -14,7 +14,7 @@ statusRoutes.get("/get-status", verifyToken, getStatus)
 // delete status
 statusRoutes.delete("/delete-status", verifyToken, deleteStatus)
 
-// get all status
-statusRoutes.get("/get-all-status", verifyToken, getAllUsersStatus)
+// get friends status
+statusRoutes.get("/get-friends-status", verifyToken, getFriendsStatuses)
 
 export default statusRoutes
