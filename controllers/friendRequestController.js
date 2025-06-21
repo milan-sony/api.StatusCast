@@ -90,8 +90,6 @@ export const respondToFriendRequest = async (req, res) => {
         const to = req.user?._id // Logged-in user
         const { from, action } = req.body // action = 'accept' or 'reject'
 
-        console.log("from:", from, "action: ", action, "to: ", to)
-
         const friendRequest = await FriendRequest.findOne({ from, to, status: "pending" })
 
         if (!friendRequest) {

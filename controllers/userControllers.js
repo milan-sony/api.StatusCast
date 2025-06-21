@@ -6,7 +6,7 @@ export const profile = (req, res) => {
             user: req.user
         })
     } catch (error) {
-        console.log("Error in finding profile", error.message)
+        console.error("Error in finding profile", error.message)
         res.status(500).json({
             status: 500,
             message: "Internal server error",

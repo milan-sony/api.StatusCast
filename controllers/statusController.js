@@ -143,23 +143,15 @@ export const getFriendsStatuses = async (req, res) => {
     try {
         const loggedUserId = req.user?._id
 
-        console.log("loggedUserId", loggedUserId)
-
         // Get current user's friends
         const currentUser = await User.findById(loggedUserId).select("friends")
 
-        console.log("currentUser: ", currentUser)
-
         const friendsIds = currentUser.friends
-
-        console.log("friendsIds: ", friendsIds)
 
         // Get statuses posted by friends only
         const statuses = await Status.find({ userId: { $in: friendsIds } })
             .sort({ createdAt: -1 }) // latest first
             .populate("userId", "firstName lastName -_id") // Get firstName & lastName from User, exclude _id
-
-        console.log("statuses: ", statuses)
 
         return res.status(200).json({
             status: 200,
